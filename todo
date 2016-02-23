@@ -93,9 +93,44 @@ function addTodo {
     echo "$todoLine"
 }
 
-#TODO parse parameters
+# parse parameters
+while [[ $# > 0 ]]; do
+    key="$1"
 
-filename=$(getTodoFile)
-echo "file is $filename"
-#listTodo $filename
-addTodo $filename
+    case $key in
+        -f|--file)
+            filename="$2"
+            shift # past the file argument
+        ;;
+        -a|--add)
+            actionAdd="true"
+            # no argument to shift past
+        ;;
+        -l|--list)
+            actionList="true"
+            # no argument to shift past
+        ;;
+            -h|--help)
+            # TODO print help
+            exit
+        ;;
+        *)
+            # unknown option
+        ;;
+    esac
+    shift
+done
+
+# ensure we have a filename
+if [ -z "$filename" ]; then
+    filename=$(getTodoFile)
+fi
+echo "todo file: $filename"
+
+if [ "$actionList" ]; then
+    listTodo $filename
+fi
+
+if [ "$actionAdd" ]; then
+    addTodo $filename
+fi
