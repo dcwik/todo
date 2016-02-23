@@ -1,10 +1,23 @@
 #!/bin/bash
 
-TODO_FILE=/home/local/ANT/cwik/todo.txt
+function setTodoFile {
+    # see if FILE has already been set (eg, via command line arguments),
+    # if not, try and grab it from ENV variable
+    if [ -z "$FILE" ]; then
+        FILE=$TODO_FILE
+    fi
+
+    # if we still don't have FILE set, default to $HOME/todo.txt
+    if [ -z "$FILE" ]; then
+        FILE=$HOME/todo.txt
+    fi
+}
 
 function list {
     # sort the file, and filter out completed items (ie, starting with x)
     sort $1 | grep -v '^x'
 }
 
-list $TODO_FILE
+setTodoFile
+echo "file is $FILE"
+list $FILE
