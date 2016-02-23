@@ -26,20 +26,25 @@ function addTodo {
     local priority
     local message
     local projects
-    local context
+    local contexts
 
+    # priority
     while true; do
-        read -p 'Optional Priority [A-Z]: ' priority
+        read -p 'Priority (Optional) [A-Z]: ' priority
 
         # convert to upper case
         priority=${priority^^}
 
         # validate priority, break if it's ok
         if [[ $priority =~ ^[A-Z]?$ ]]; then
+            if [ "$priority" ]; then
+                local styledPriority="($priority) "
+            fi
             break
         fi
     done
 
+    # message
     while true; do
         read -p 'Message: ' message
 
@@ -49,11 +54,48 @@ function addTodo {
         fi
     done
 
-    echo "priority is \"$priority\""
-    echo "message is \"$message\""
+    # projects
+    while true; do
+        read -p 'Projects (Optional, space delimited): ' projects
+        local styledProjects
+
+        # validate projects, break if it's ok
+        if [[ $projects =~ ^[a-zA-Z0-9\ ]*$ ]]; then
+
+            # prepend "+" to each project
+            for word in ${projects}; do
+                styledProjects+=" +$word"
+            done
+
+            break
+        fi
+    done
+
+    # contexts
+    while true; do
+        read -p 'Contexts (Optional, space delimited): ' contexts
+        local styledContexts
+
+        # validate contexts, break if it's ok
+        if [[ $contexts =~ ^[a-zA-Z0-9\ ]*$ ]]; then
+
+            # prepend "@" to each context
+            for word in ${contexts}; do
+                styledContexts+=" @$word"
+            done
+
+            break
+        fi
+    done
+
+    local todoLine="$styledPriority$message$styledProjects$styledContexts"
+    echo "$todoLine" >> "$1"
+    echo "$todoLine"
 }
+
+#TODO parse parameters
 
 filename=$(getTodoFile)
 echo "file is $filename"
 #listTodo $filename
-addTodo
+addTodo $filename
