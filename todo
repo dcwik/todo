@@ -1,24 +1,10 @@
-#!/usr/bin/python
+#!/bin/bash
 
-import sys, getopt
+TODO_FILE=/home/local/ANT/cwik/todo.txt
 
-def main(argv):
-  inputfile = '~/todo.txt'
-  action = 'meow'
-  try:
-    opts, args = getopt.getopt(argv, "i:l", ["ifile=","list"])
-  except getopt.GetoptError:
-    print 'todo -h'
-    sys.exit(2)
-  for opt, arg in opts:
-    if opt == '-h':
-      print 'help for h'
-      sys.exit()
-    elif opt in ("-i", "--ifile"):
-      inputfile = arg
-    elif opt in ("-l", "==list"):
-      action = 'list'
-  print 'input file is "', inputfile
+function list {
+    # sort the file, and filter out completed items (ie, starting with x)
+    sort $1 | grep -v '^x'
+}
 
-if __name__ == "__main__":
-  main(sys.argv[1:])
+list $TODO_FILE
