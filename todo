@@ -29,14 +29,28 @@ function addTodo {
     local context
 
     while true; do
-        read -p 'Priority [A-Z ]: ' priority
+        read -p 'Optional Priority [A-Z]: ' priority
+
+        # convert to upper case
+        priority=${priority^^}
+
         # validate priority, break if it's ok
         if [[ $priority =~ ^[A-Z]?$ ]]; then
             break
         fi
     done
 
-    echo "priority is $priority"
+    while true; do
+        read -p 'Message: ' message
+
+        # validate there is some message
+        if [[ $message =~ .*[^\s]+.* ]]; then
+            break
+        fi
+    done
+
+    echo "priority is \"$priority\""
+    echo "message is \"$message\""
 }
 
 filename=$(getTodoFile)
