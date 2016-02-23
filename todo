@@ -21,9 +21,25 @@ function listTodo {
     sort $1 | grep -v '^x'
 }
 
-#function addTodo {
-#}
+function addTodo {
+
+    local priority
+    local message
+    local projects
+    local context
+
+    while true; do
+        read -p 'Priority [A-Z ]: ' priority
+        # validate priority, break if it's ok
+        if [[ $priority =~ ^[A-Z]?$ ]]; then
+            break
+        fi
+    done
+
+    echo "priority is $priority"
+}
 
 filename=$(getTodoFile)
 echo "file is $filename"
-listTodo $filename
+#listTodo $filename
+addTodo
