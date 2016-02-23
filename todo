@@ -102,12 +102,16 @@ while [[ $# > 0 ]]; do
             filename="$2"
             shift # past the file argument
         ;;
-        -a|--add)
+        -n|--new)
             actionAdd="true"
             # no argument to shift past
         ;;
         -l|--list)
             actionList="true"
+            # no argument to shift past
+        ;;
+        -e|--edit)
+            actionEdit="true"
             # no argument to shift past
         ;;
             -h|--help)
@@ -125,6 +129,12 @@ done
 if [ -z "$filename" ]; then
     filename=$(getTodoFile)
 fi
+
+if [ "$actionEdit" ]; then
+    $EDITOR $filename
+    exit
+fi
+
 echo "todo file: $filename"
 
 if [ "$actionList" ]; then
