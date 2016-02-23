@@ -1,23 +1,29 @@
 #!/bin/bash
 
-function setTodoFile {
+function getTodoFile {
+    local filename
+
     # see if FILE has already been set (eg, via command line arguments),
     # if not, try and grab it from ENV variable
     if [ -z "$FILE" ]; then
-        FILE=$TODO_FILE
+        filename=$TODO_FILE
     fi
 
     # if we still don't have FILE set, default to $HOME/todo.txt
     if [ -z "$FILE" ]; then
-        FILE=$HOME/todo.txt
+        filename=$HOME/todo.txt
     fi
+    echo "$filename"
 }
 
-function list {
+function listTodo {
     # sort the file, and filter out completed items (ie, starting with x)
     sort $1 | grep -v '^x'
 }
 
-setTodoFile
-echo "file is $FILE"
-list $FILE
+#function addTodo {
+#}
+
+filename=$(getTodoFile)
+echo "file is $filename"
+listTodo $filename
