@@ -131,7 +131,7 @@ if [ -z "$filename" ]; then
 fi
 
 if [ "$actionEdit" ]; then
-    $EDITOR $filename
+    "${EDITOR:-vi}" $filename
     exit
 fi
 
