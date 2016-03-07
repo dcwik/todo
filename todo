@@ -17,8 +17,12 @@ function getTodoFile {
 }
 
 function listTodo {
-    # sort the file, and filter out completed items (ie, starting with x)
-    sort $1 | grep -v '^x'
+    if [ "$2" ]; then
+        sort $1 | grep -v '^x' | grep -E " \+$2( .*)*$"
+    else
+        # sort the file, and filter out completed items (ie, starting with x)
+        sort $1 | grep -v '^x'
+    fi
 }
 
 function addTodo {
@@ -102,6 +106,11 @@ while [[ $# > 0 ]]; do
             filename="$2"
             shift # past the file argument
         ;;
+        -p|--project)
+            project="$2"
+            actionListProject="true"
+            shift # past the project argument
+        ;;
         -n|--new)
             actionAdd="true"
             # no argument to shift past
@@ -137,10 +146,10 @@ fi
 
 echo "todo file: $filename"
 
-if [ "$actionList" ]; then
+if [ "$actionListProject" ]; then
+    listTodo $filename $project
+elif [ "$actionList" ]; then
     listTodo $filename
-fi
-
-if [ "$actionAdd" ]; then
+elif [ "$actionAdd" ]; then
     addTodo $filename
 fi
